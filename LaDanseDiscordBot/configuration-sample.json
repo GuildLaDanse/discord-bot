@@ -1,7 +1,13 @@
 ﻿{
   "prefix": "!",
-  "tokens": {
-    "discord": null,
-    "LaDanseDiscordSecret": "SomeSecret"
+  "discord": {
+    "token": "YourDiscordBotToken"
+  },
+  "ladanse": {
+    "api": {
+      "secret": "ApiSecret",
+      "baseUrl": "https://api.example.com/api/request",
+      "siteName": "A label for the site"
+    }
   }
 }

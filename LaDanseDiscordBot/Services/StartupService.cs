@@ -27,7 +27,7 @@ namespace LaDanseDiscordBot.Services
 
         public async Task StartAsync()
         {
-            string discordToken = _config["tokens:discord"];     // Get the discord token from the config file
+            string discordToken = _config["discord:token"];     // Get the discord token from the config file
             if (string.IsNullOrWhiteSpace(discordToken))
                 throw new Exception("Please enter your bot's token into the `_configuration.json` file found in the applications root directory.");
 
