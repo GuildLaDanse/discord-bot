@@ -1,7 +1,7 @@
 ﻿{
-    "prefix": "!",
-    "tokens": 
-    {
-        "discord": null
-    }
+  "prefix": "!",
+  "tokens": {
+    "discord": null,
+    "LaDanseDiscordSecret": "SomeSecret"
+  }
 }

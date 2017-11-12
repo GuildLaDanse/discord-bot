@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LaDanseDiscordBot.Modules
 {
+    [Name("Help")]
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
         private readonly CommandService _service;
