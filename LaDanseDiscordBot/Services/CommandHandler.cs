@@ -41,8 +41,25 @@ namespace LaDanseDiscordBot.Services
             {
                 var result = await _commands.ExecuteAsync(context, argPos, _provider);     // Execute the command
 
-                if (!result.IsSuccess)     // If not successful, reply with the error.
-                    await context.Channel.SendMessageAsync(result.ToString());
+                if (!result.IsSuccess)
+                {
+                    System.Console.WriteLine(result.ToString());
+
+                    if (CommandError.UnknownCommand == result.Error)
+                    {
+                        await context.Channel.SendMessageAsync("Sorry, I don't know that command, try !help for a list of commands you can use.");
+                    }
+                    else if (CommandError.BadArgCount == result.Error)
+                    {
+                        await context.Channel.SendMessageAsync("Try !help for a list of commands and the parameters you can pass.");
+                    }
+                    else
+                    {
+                        await context.Channel.SendMessageAsync("Oh my, something went wrong on my side! Shouts for help have gone out!");
+                    }
+                    
+                    
+                }
             }
         }
     }
