@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using LaDanseRestAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
@@ -14,10 +15,12 @@ namespace LaDanseDiscordBot.Modules
     public class RaidsModule : ModuleBase<SocketCommandContext>
     {
         private readonly IConfigurationRoot _config;
+        private readonly RaidService _raidService;
 
-        public RaidsModule(IConfigurationRoot config)
+        public RaidsModule(IConfigurationRoot config, RaidService raidService)
         {
             _config = config;
+            _raidService = raidService;
         }
 
         [Command("raids"), Alias("events")]
@@ -28,14 +31,7 @@ namespace LaDanseDiscordBot.Modules
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.DefaultRequestHeaders.Add("Authorization",
-                    "Bearer " + _config["ladanse:api:secret"]);
-
-                var response = httpClient.GetStringAsync(new Uri(_config["ladanse:api:baseUrl"] + "/discord/api/request")).Result;
-                
-                var eventsPage = JObject.Parse(response);
-                
-                var events = eventsPage["events"];
+                var events = await _raidService.GetRaids();
 
                 if (!events.Any())
                 {
@@ -48,17 +44,7 @@ namespace LaDanseDiscordBot.Modules
 
                 resultStr += "Upcoming raids from " + _config["ladanse:api:baseUrl"] + "\n\n";
 
-                foreach (var eventObj in events.Children())
-                {
-                    var eventName = eventObj["name"];
-                    var jtEventInviteTime = eventObj["inviteTime"];
-                   
-                    var eventInviteTime = Convert.ToDateTime(jtEventInviteTime.ToString());
-
-                    var eventUrl = _config["ladanse:api:baseUrl"] + "/app/events#/events/event/" + eventObj["id"];
-
-                    resultStr += $"**{eventName}** on {eventInviteTime:ddd d/M}\n{eventUrl}\n\n";
-                }
+                resultStr = events.Aggregate(resultStr, (current, eventStr) => current + eventStr);
             }
 
             await ReplyAsync(resultStr);

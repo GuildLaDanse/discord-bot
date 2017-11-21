@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using LaDanseDiscordBot.Services;
+using LaDanseRestAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -42,11 +43,14 @@ namespace LaDanseDiscordBot
                 }))
                 
                 // Add remaining services to the provider
-                .AddSingleton<CommandHandler>()     // Add remaining services to the provider
+                .AddSingleton<CommandHandler>()
                 .AddSingleton<LoggingService>()     
                 .AddSingleton<StartupService>()
                 .AddSingleton<Random>()             
-                .AddSingleton(_config);
+                .AddSingleton(_config)
+
+                // Add La Danse services
+                .AddSingleton<RaidService>();
 
             var provider = services.BuildServiceProvider();     // Create the service provider
 
