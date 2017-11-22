@@ -5,6 +5,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using LaDanseDiscordBot.Services;
 using LaDanseRestAPI.Services;
+using LaDanseSiteConnector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,6 +51,7 @@ namespace LaDanseDiscordBot
                 .AddSingleton(_config)
 
                 // Add La Danse services
+                .AddSingleton<SiteConnector>()
                 .AddSingleton<RaidService>();
 
             var provider = services.BuildServiceProvider();     // Create the service provider

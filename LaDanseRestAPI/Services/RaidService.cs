@@ -1,49 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using LaDanseRestAPI.Dto.Event;
+using LaDanseSiteConnector;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace LaDanseRestAPI.Services
 {
     public class RaidService
     {
         private readonly IConfigurationRoot _config;
+        private readonly SiteConnector _siteConnector;
 
-        public RaidService(IConfigurationRoot config)
+        public RaidService(IConfigurationRoot config, SiteConnector siteConnector)
         {
             _config = config;
+            _siteConnector = siteConnector;
         }
 
-        public async Task<List<String>> GetRaids()
+        public async Task<List<string>> GetRaids()
         {
-            using (var httpClient = new HttpClient())
+            var eventsPage = await _siteConnector.MakeRequest<EventPage>("GetEvents", null, null);
+
+            var result = new List<string>();
+
+            foreach (var eventObj in eventsPage.Events)
             {
-                httpClient.DefaultRequestHeaders.Add("Authorization",
-                    "Bearer " + _config["ladanse:api:secret"]);
+                var eventName = eventObj.Name;
 
-                var response = await httpClient.GetStringAsync(new Uri(_config["ladanse:api:baseUrl"] + "/discord/api/request"));
+                var eventInviteTime = eventObj.InviteTime;
 
-                var eventsPage = JsonConvert.DeserializeObject<EventPage>(response);
-                
-                var result = new List<String>();
+                var eventUrl = _config["ladanse:api:baseUrl"] + "/app/events#/events/event/" + eventObj.Id;
 
-                foreach (var eventObj in eventsPage.Events)
-                {
-                    var eventName = eventObj.Name;
-
-                    var eventInviteTime = eventObj.InviteTime;
-
-                    var eventUrl = _config["ladanse:api:baseUrl"] + "/app/events#/events/event/" + eventObj.Id;
-
-                    result.Add($"**{eventName}** on {eventInviteTime:ddd d/M}\n{eventUrl}\n\n");
-                }
-
-                return result;
+                result.Add($"**{eventName}** on {eventInviteTime:ddd d/M}\n{eventUrl}\n\n");
             }
+
+            return result;
         }
     }
 }

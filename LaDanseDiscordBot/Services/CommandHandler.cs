@@ -57,8 +57,6 @@ namespace LaDanseDiscordBot.Services
                     {
                         await context.Channel.SendMessageAsync("Oh my, something went wrong on my side! Shouts for help have gone out!");
                     }
-                    
-                    
                 }
             }
         }
