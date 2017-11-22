@@ -13,7 +13,6 @@ namespace LaDanseDiscordBot.Services
         private readonly IConfigurationRoot _config;
         private readonly IServiceProvider _provider;
 
-        // DiscordSocketClient, CommandService, IConfigurationRoot, and IServiceProvider are injected automatically from the IServiceProvider
         public CommandHandler(
             DiscordSocketClient discord,
             CommandService commands,
@@ -32,14 +31,18 @@ namespace LaDanseDiscordBot.Services
         {
             if (!(s is SocketUserMessage msg)) return;
             
-            if (msg.Author == _discord.CurrentUser) return;     // Ignore self when checking commands
-            
-            var context = new SocketCommandContext(_discord, msg);     // Create the command context
+            // Ignore self when checking commands
+            if (msg.Author == _discord.CurrentUser) return;     
 
-            int argPos = 0;     // Check if the message has a valid command prefix
+            var context = new SocketCommandContext(_discord, msg);     
+
+            // Check if the message has a valid command prefix
+            // A valid command prefix is either the prefixer characters or a direct reference of the bot user
+            int argPos = 0;     
             if (msg.HasStringPrefix(_config["prefix"], ref argPos) || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
             {
-                var result = await _commands.ExecuteAsync(context, argPos, _provider);     // Execute the command
+                // Execute the command
+                var result = await _commands.ExecuteAsync(context, argPos, _provider);     
 
                 if (!result.IsSuccess)
                 {
@@ -47,15 +50,15 @@ namespace LaDanseDiscordBot.Services
 
                     if (CommandError.UnknownCommand == result.Error)
                     {
-                        await context.Channel.SendMessageAsync("Sorry, I don't know that command, try !help for a list of commands you can use.");
+                        await context.Channel.SendMessageAsync($"Sorry, I don't know that command, try {_config["prefix"]}help for a list of commands you can use.");
                     }
                     else if (CommandError.BadArgCount == result.Error)
                     {
-                        await context.Channel.SendMessageAsync("Try !help for a list of commands and the parameters you can pass.");
+                        await context.Channel.SendMessageAsync($"Try {_config["prefix"]}help for a list of commands and the parameters you can pass.");
                     }
                     else
                     {
-                        await context.Channel.SendMessageAsync("Oh my, something went wrong on my side! Shouts for help have gone out!");
+                        await context.Channel.SendMessageAsync("Oh my, something went wrong on my side :( Shouts for help have gone out!");
                     }
                 }
             }
