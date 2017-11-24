@@ -4,18 +4,21 @@ using System.Threading.Tasks;
 using LaDanseRestAPI.Dto.Event;
 using LaDanseSiteConnector;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace LaDanseRestAPI.Services
 {
     public class RaidService
     {
-        private readonly IConfigurationRoot _config;
+        private readonly SiteUrlConstructor _siteUrlConstructor;
         private readonly SiteConnector _siteConnector;
+        private readonly ILogger _logger;
 
-        public RaidService(IConfigurationRoot config, SiteConnector siteConnector)
+        public RaidService(SiteUrlConstructor siteUrlConstructor, SiteConnector siteConnector, ILogger<RaidService> logger)
         {
-            _config = config;
+            _siteUrlConstructor = siteUrlConstructor;
             _siteConnector = siteConnector;
+            _logger = logger;
         }
 
         public async Task<List<string>> GetRaids()
@@ -28,14 +31,21 @@ namespace LaDanseRestAPI.Services
             {
                 var eventName = eventObj.Name;
 
-                var eventInviteTime = eventObj.InviteTime;
+                var eventInviteTime = ToRealmTimeZone(eventObj.InviteTime);
 
-                var eventUrl = _config["ladanse:api:baseUrl"] + "/app/events#/events/event/" + eventObj.Id;
+                var eventUrl = _siteUrlConstructor.CreateGetEventDetail(eventObj.Id);
 
-                result.Add($"**{eventName}** on {eventInviteTime:ddd d/M}\n{eventUrl}\n\n");
+                _logger.LogInformation("Found event, added to response");
+
+                result.Add($"**{eventName}** on {eventInviteTime:ddd d/M - HH:mm}\n{eventUrl}\n\n");
             }
 
             return result;
+        }
+
+        private DateTime ToRealmTimeZone(DateTime origDateTime)
+        {
+            return TimeZoneInfo.ConvertTime(origDateTime, TimeZoneInfo.FindSystemTimeZoneById("Romance Standard Time"));
         }
     }
 }
