@@ -8,6 +8,7 @@ using LaDanseRestAPI.Services;
 using LaDanseSiteConnector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LaDanseDiscordBot
 {
@@ -42,7 +43,12 @@ namespace LaDanseDiscordBot
                     DefaultRunMode = RunMode.Async,     // Force all commands to run async
                     LogLevel = LogSeverity.Verbose
                 }))
-                
+
+                .AddSingleton(new LoggerFactory()
+                    .AddConsole(LogLevel.Trace)
+                    .AddDebug())
+                .AddLogging()
+
                 // Add remaining services to the provider
                 .AddSingleton<CommandHandler>()
                 .AddSingleton<LoggingService>()     
@@ -51,6 +57,7 @@ namespace LaDanseDiscordBot
                 .AddSingleton(_config)
 
                 // Add La Danse services
+                .AddSingleton<SiteUrlConstructor>()
                 .AddSingleton<SiteConnector>()
                 .AddSingleton<RaidService>();
 
@@ -61,7 +68,10 @@ namespace LaDanseDiscordBot
             await provider.GetRequiredService<StartupService>().StartAsync();
             provider.GetRequiredService<CommandHandler>();
 
-            Console.WriteLine("Starting La Danse Discord Bot");
+            provider.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(Program))
+                .LogInformation("Starting La Danse Discord Bot");
+
+            //Console.WriteLine("Starting La Danse Discord Bot");
             
             await Task.Delay(-1);     // Prevent the application from closing
         }

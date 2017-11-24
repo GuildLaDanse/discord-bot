@@ -4,40 +4,54 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Logging;
 
 namespace LaDanseDiscordBot.Services
 {
     public class LoggingService
     {
-        private readonly DiscordSocketClient _discord;
-        private readonly CommandService _commands;
-
-        private string _logDirectory { get; }
-        private string _logFile => Path.Combine(_logDirectory, $"{DateTime.UtcNow.ToString("yyyy-MM-dd")}.txt");
+        private readonly ILogger _logger;
 
         // DiscordSocketClient and CommandService are injected automatically from the IServiceProvider
-        public LoggingService(DiscordSocketClient discord, CommandService commands)
+        public LoggingService(DiscordSocketClient discord, CommandService commands, ILogger<IDiscordClient> logger)
         {
-            _logDirectory = Path.Combine(AppContext.BaseDirectory, "logs");
-            
-            _discord = discord;
-            _commands = commands;
-            
-            _discord.Log += OnLogAsync;
-            _commands.Log += OnLogAsync;
+            _logger = logger;
+
+            discord.Log += OnLogAsync;
+            commands.Log += OnLogAsync;
         }
-        
+
         private Task OnLogAsync(LogMessage msg)
         {
-            if (!Directory.Exists(_logDirectory))     // Create the log directory if it doesn't exist
-                Directory.CreateDirectory(_logDirectory);
-            if (!File.Exists(_logFile))               // Create today's log file if it doesn't exist
-                File.Create(_logFile).Dispose();
+            string logText =
+                $"{msg.Source}: {msg.Exception?.ToString() ?? msg.Message}";
 
-            string logText = $"{DateTime.UtcNow.ToString("hh:mm:ss")} [{msg.Severity}] {msg.Source}: {msg.Exception?.ToString() ?? msg.Message}";
-            File.AppendAllText(_logFile, logText + "\n");     // Write the log text to a file
+            switch (msg.Severity)
+            {
+                case LogSeverity.Critical:
+                    _logger.LogCritical(logText);
+                    break;
+                case LogSeverity.Debug:
+                    _logger.LogDebug(logText);
+                    break;
+                case LogSeverity.Error:
+                    _logger.LogError(logText);
+                    break;
+                case LogSeverity.Info:
+                    _logger.LogInformation(logText);
+                    break;
+                case LogSeverity.Verbose:
+                    _logger.LogTrace(logText);
+                    break;
+                case LogSeverity.Warning:
+                    _logger.LogWarning(logText);
+                    break;
+                default:
+                    _logger.LogWarning(logText);
+                    break;
+            }
 
-            return Console.Out.WriteLineAsync(logText);       // Write the log text to the console
+            return Task.CompletedTask;
         }
     }
 }
