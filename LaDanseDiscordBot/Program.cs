@@ -57,9 +57,9 @@ namespace LaDanseDiscordBot
                 .AddSingleton(_config)
 
                 // Add La Danse services
-                .AddSingleton<SiteUrlConstructor>()
-                .AddSingleton<SiteConnector>()
-                .AddSingleton<RaidService>();
+                .AddSingleton<LaDanseUrlBuilder>()
+                .AddSingleton<LaDanseRestClient>()
+                .AddSingleton<EventService>();
 
             var provider = services.BuildServiceProvider();     // Create the service provider
 

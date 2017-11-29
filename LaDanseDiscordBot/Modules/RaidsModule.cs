@@ -15,12 +15,12 @@ namespace LaDanseDiscordBot.Modules
     public class RaidsModule : ModuleBase<SocketCommandContext>
     {
         private readonly IConfigurationRoot _config;
-        private readonly RaidService _raidService;
+        private readonly EventService _eventService;
 
-        public RaidsModule(IConfigurationRoot config, RaidService raidService)
+        public RaidsModule(IConfigurationRoot config, EventService eventService)
         {
             _config = config;
-            _raidService = raidService;
+            _eventService = eventService;
         }
 
         [Command("raids"), Alias("events")]
@@ -31,7 +31,7 @@ namespace LaDanseDiscordBot.Modules
 
             using (var httpClient = new HttpClient())
             {
-                var events = await _raidService.GetRaids();
+                var events = await _eventService.GetRaids();
 
                 if (!events.Any())
                 {
