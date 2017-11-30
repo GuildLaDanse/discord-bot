@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LaDanseSiteConnector.Dto;
+using LaDanseRestTransport.Dto;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace LaDanseSiteConnector
+namespace LaDanseRestTransport
 {
     public class LaDanseRestClient
     {
@@ -56,6 +55,8 @@ namespace LaDanseSiteConnector
                 _logger.LogDebug("Making PostAsJsonAsync call");
 
                 var responseMsg = await httpClient.GetStringAsync(CreateEndpointUri());
+
+                _logger.LogDebug(responseMsg);
 
                 if (true)
                 {

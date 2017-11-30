@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace LaDanseRestAPI.Dto.Reference
+namespace LaDanseServices.Dto.Reference
 {
     public class AccountReference
     {

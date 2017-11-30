@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace LaDanseRestAPI.Dto.Event
+namespace LaDanseServices.Dto.Event
 {
     public class EventPage
     {

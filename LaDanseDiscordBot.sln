@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaDanseDiscordBot", "LaDanseDiscordBot\LaDanseDiscordBot.csproj", "{CD99BE2F-E8E0-42AC-AB3A-EB4263313F97}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4E5F4866-EDAF-46E1-B931-708B67F263AA} = {4E5F4866-EDAF-46E1-B931-708B67F263AA}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaDanseRestAPI", "LaDanseRestAPI\LaDanseRestAPI.csproj", "{4E5F4866-EDAF-46E1-B931-708B67F263AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaDanseServices", "LaDanseServices\LaDanseServices.csproj", "{4E5F4866-EDAF-46E1-B931-708B67F263AA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E236E35F-2EBB-4521-8E5B-D2E46DA8E94E} = {E236E35F-2EBB-4521-8E5B-D2E46DA8E94E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaDanseSiteConnector", "LaDanseSiteConnector\LaDanseSiteConnector.csproj", "{E236E35F-2EBB-4521-8E5B-D2E46DA8E94E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaDanseRestTransport", "LaDanseRestTransport\LaDanseRestTransport.csproj", "{E236E35F-2EBB-4521-8E5B-D2E46DA8E94E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

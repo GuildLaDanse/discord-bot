@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using LaDanseRestAPI.Dto.Reference;
+using LaDanseServices.Dto.Reference;
 using Newtonsoft.Json;
 
-namespace LaDanseRestAPI.Dto.Event
+namespace LaDanseServices.Dto.Event
 {
     public class Event
     {

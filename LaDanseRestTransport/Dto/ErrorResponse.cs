@@ -1,4 +1,4 @@
-﻿namespace LaDanseSiteConnector.Dto
+﻿namespace LaDanseRestTransport.Dto
 {
     public struct ErrorResponse
     {

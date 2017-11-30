@@ -3,6 +3,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;NU1701</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="1.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
@@ -25,7 +28,7 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LaDanseRestAPI\LaDanseRestAPI.csproj" />
-    <ProjectReference Include="..\LaDanseSiteConnector\LaDanseSiteConnector.csproj" />
+    <ProjectReference Include="..\LaDanseServices\LaDanseServices.csproj" />
+    <ProjectReference Include="..\LaDanseRestTransport\LaDanseRestTransport.csproj" />
   </ItemGroup>
 </Project>

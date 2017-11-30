@@ -8,10 +8,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="TimeZoneConverter" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LaDanseSiteConnector\LaDanseSiteConnector.csproj" />
+    <ProjectReference Include="..\LaDanseRestTransport\LaDanseRestTransport.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LaDanseRestAPI.Dto.Event;
-using LaDanseSiteConnector;
+using LaDanseRestTransport;
+using LaDanseServices.Dto.Event;
 using Microsoft.Extensions.Logging;
+using TimeZoneConverter;
 
-namespace LaDanseRestAPI.Services
+namespace LaDanseServices.Services
 {
     public class EventService
     {
@@ -45,7 +46,8 @@ namespace LaDanseRestAPI.Services
             }
             catch (Exception e)
             {
-               _logger.LogError("Failed to get events", e);
+               _logger.LogError("Failed to get events", e.StackTrace);
+                _logger.LogError(e.ToString());
             }
             
             return result;
@@ -53,7 +55,7 @@ namespace LaDanseRestAPI.Services
 
         private DateTime ToRealmTimeZone(DateTime origDateTime)
         {
-            return TimeZoneInfo.ConvertTime(origDateTime, TimeZoneInfo.FindSystemTimeZoneById("CET"));
+            return TimeZoneInfo.ConvertTime(origDateTime, TZConvert.GetTimeZoneInfo("CET"));
         }
     }
 }

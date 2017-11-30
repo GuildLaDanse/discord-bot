@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using LaDanseRestAPI.Services;
+using LaDanseServices.Services;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
