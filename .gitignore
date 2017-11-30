@@ -4,5 +4,6 @@ bin/
 .vs/
 
 configuration.json
+appsettings.Development.json
 
 \.vscode/
