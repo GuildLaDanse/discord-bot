@@ -1,20 +1,13 @@
-using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using BotCommon;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using LaDanseDiscordBot.Persistence;
 using LaDanseDiscordBot.Persistence.Entities;
 using LaDanseRestTransport;
 using LaDanseServices.Dto.Profile;
-using LaDanseServices.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using SQLitePCL;
 
 namespace LaDanseDiscordBot.Modules
 {
@@ -52,7 +45,7 @@ namespace LaDanseDiscordBot.Modules
 
                 if (discordUser == null)
                 {
-                    Console.WriteLine("User does not yet exist, creating it");
+                    _logger.LogInformation("User does not yet exist, creating it");
                     
                     discordUser = new DiscordUser {DiscordUserId = Context.User.Id};   
                     context.DiscordUsers.Add(discordUser);
@@ -105,7 +98,7 @@ namespace LaDanseDiscordBot.Modules
         
         private async Task HelloForgottenUser(DiscordBotContext context, DiscordUser discordUser)
         {
-            await ReplyAsync($"Hello {Context.User.Username}, I remember you but I seem to have forgotten some. " +
+            await ReplyAsync($"Hello {Context.User.Username}, I remember you but I seem to have forgotten some of our adventure. " +
                              $"I have reached out to you privately to get to know each other again.");
             
             await GetToKnowUser(context, discordUser);
