@@ -33,112 +33,117 @@ namespace LaDanseRestTransport
 
         public string QueryEventByIdUrl()
         {
-            return "/api/events/{eventId}";
+            return ConstructFqUrl("/api/events/{eventId}");
         }
 
         public string PostEventUrl()
         {
-            return "/api/events/";
+            return ConstructFqUrl("/api/events/");
         }
 
         public string PutEventUrl()
         {
-            return "/api/events/{eventId}";
+            return ConstructFqUrl("/api/events/{eventId}");
         }
 
         public string PutEventStateUrl()
         {
-            return "/api/events/{eventId}/state";
+            return ConstructFqUrl("/api/events/{eventId}/state");
         }
 
         public string DeleteEventUrl()
         {
-            return "/api/events/{eventId}";
+            return ConstructFqUrl("/api/events/{eventId}");
         }
 
         public string PostSignUpUrl()
         {
-            return "/api/events/{eventId}/signUps";
+            return ConstructFqUrl("/api/events/{eventId}/signUps");
         }
 
         public string PutSignUpUrl()
         {
-            return "/api/events/{eventId}/signUps/{signUpId}";
+            return ConstructFqUrl("/api/events/{eventId}/signUps/{signUpId}");
         }
 
         public string DeleteSignUpUrl()
         {
-            return "/api/events/{eventId}/signUps/{signUpId}";
+            return ConstructFqUrl("/api/events/{eventId}/signUps/{signUpId}");
         }
 
         public string GetAllGameClassesUrl()
         {
-            return "/api/gamedata/gameClasses/";
+            return ConstructFqUrl("/api/gamedata/gameClasses/");
         }
 
         public string GetAllGameFactionsUrl()
         {
-            return "/api/gamedata/gameFactions/";
+            return ConstructFqUrl("/api/gamedata/gameFactions/");
         }
 
         public string GetAllGameRacesUrl()
         {
-            return "/api/gamedata/gameRaces/";
+            return ConstructFqUrl("/api/gamedata/gameRaces/");
         }
 
         public string GetAllRealmsUrl()
         {
-            return "/api/gamedata/realms/";
+            return ConstructFqUrl("/api/gamedata/realms/");
         }
 
         public string PostRealmUrl()
         {
-            return "/api/gamedata/realms/";
+            return ConstructFqUrl("/api/gamedata/realms/");
         }
 
         public string GetAllGuildsUrl()
         {
-            return "/api/guilds/";
+            return ConstructFqUrl("/api/guilds/");
         }
 
         public string PostGuildUrl()
         {
-            return "/api/guilds/";
+            return ConstructFqUrl("/api/guilds/");
         }
 
         public string GetCharacterUrl()
         {
-            return "/api/characters/{characterId}";
+            return ConstructFqUrl("/api/characters/{characterId}");
         }
 
         public string PostClaimUrl()
         {
-            return "/api/characters/{characterId}/claim";
+            return ConstructFqUrl("/api/characters/{characterId}/claim");
         }
 
         public string PutClaimUrl()
         {
-            return "/api/characters/{characterId}/claim";
+            return ConstructFqUrl("/api/characters/{characterId}/claim");
         }
 
         public string DeleteClaimUrl()
         {
-            return "/api/characters/{characterId}/claim";
+            return ConstructFqUrl("/api/characters/{characterId}/claim");
         }
 
         public string GetCharactersByCriteriaUrl()
         {
-            return "/api/queries/charactersByCriteria";
+            return ConstructFqUrl("/api/queries/charactersByCriteria");
         }
 
         public string GetCharactersClaimedByAccountUrl()
         {
-            return "/api/queries/charactersClaimedByAccount";
+            return ConstructFqUrl("/api/queries/charactersClaimedByAccount");
         }
 
         public string GetCharactersInGuildUrl()
         {
-            return "/api/queries/charactersInGuild";
+            return ConstructFqUrl("/api/queries/charactersInGuild");
+        }
+
+        public string ProfileUrl()
+        {
+            return ConstructFqUrl("/api/profile/");
         }
 
         public string DiscordGrantUrl(string authCode)

@@ -37,17 +37,30 @@ namespace LaDanseRestTransport
 
                 if (responseMsg.IsSuccessStatusCode)
                 {
-                    Console.WriteLine(content);
+                    try
+                    {
+                        var bodyContent = JsonConvert.DeserializeObject<TReturn>(content);
                     
-                    return new LaDanseRestResponse<TReturn>(
-                        JsonConvert.DeserializeObject<TReturn>(content)); 
+                        return new LaDanseRestResponse<TReturn>(bodyContent); 
+                    }
+                    catch (Exception e)
+                    {
+                        return new LaDanseRestResponse<TReturn>(); 
+                    }
+                    
                 }
                 else
                 {
-                    Console.WriteLine(content);
+                    try
+                    {
+                        var errorContext = JsonConvert.DeserializeObject<ErrorResponse>(content);
                     
-                    return new LaDanseRestResponse<TReturn>(
-                        JsonConvert.DeserializeObject<ErrorResponse>(content));
+                        return new LaDanseRestResponse<TReturn>(errorContext); 
+                    }
+                    catch (Exception e)
+                    {
+                        return new LaDanseRestResponse<TReturn>(); 
+                    }
                 }
             }
         }

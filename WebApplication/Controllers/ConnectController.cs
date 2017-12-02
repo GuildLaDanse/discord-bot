@@ -63,12 +63,6 @@ namespace WebApplication.Controllers
             }
 
             var authSession = authSessions[0];
-
-            Console.WriteLine("AuthSession.DiscordUser");
-            Console.WriteLine(authSession.AuthSessionId);
-            Console.WriteLine(authSession.Nonce);
-            Console.WriteLine(authSession.State);
-            Console.WriteLine(authSession.DiscordUser == null);
             
             #endregion
 
