@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BotCommon;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -32,23 +33,54 @@ namespace LaDanseDiscordBot.Modules
         {
             using (var context = _dbContextFactory.CreateContext())
             {
-                var discordUser = new DiscordUser {DiscordUserId = Context.User.Id};
+                var discordUserId = Context.User.Id;
 
-                var authSession = new AuthSession
+                #region Fetch Discord User
+
+                var discordUser = context.DiscordUsers.Find(discordUserId);
+
+                if (discordUser == null)
                 {
-                    Nonce = "ThisIsANonce",
+                    Console.WriteLine("User does not yet exist, creating it");
+                    
+                    discordUser = new DiscordUser {DiscordUserId = Context.User.Id};   
+                    context.DiscordUsers.Add(discordUser);
+                }
+
+                #endregion
+
+                #region CleanUpAuthSessions
+
+                var authSessions = context.AuthSessions
+                    .Where(b => b.DiscordUser == discordUser)
+                    .ToList();
+
+                foreach (var authSession in authSessions)
+                {
+                    if (authSession.State == AuthSessionState.Pending)
+                        authSession.State = AuthSessionState.Removed;
+                }
+                
+                #endregion
+
+                #region NewAuthSession
+
+                var newAuthSession = new AuthSession
+                {
+                    Nonce = RandomStringUtils.Random(32),
                     CreatedOn = 0,
                     DiscordUser = discordUser,
                     State = AuthSessionState.Pending
                 };
 
-                context.DiscordUsers.Add(discordUser);
-                context.AuthSessions.Add(authSession);
+                context.AuthSessions.Add(newAuthSession);
+
+                #endregion
 
                 context.SaveChanges();
-
+                
                 await Context.User.SendMessageAsync(
-                    _ldmUrlBuilder.GetDiscordAuthInform(authSession.Nonce, "http://localhost:57077/"));
+                    _ldmUrlBuilder.GetDiscordAuthInform(newAuthSession.Nonce, "http://localhost:57077/connect/website"));
             }
         }
     }

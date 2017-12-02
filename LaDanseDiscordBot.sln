@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplic
 		{CD99BE2F-E8E0-42AC-AB3A-EB4263313F97} = {CD99BE2F-E8E0-42AC-AB3A-EB4263313F97}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCommon", "BotCommon\BotCommon.csproj", "{9AE85299-0FD3-4D9F-9BB8-C6DC343A7565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{338B78E2-0F29-4A3E-ABC2-0DDD5B7DF74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{338B78E2-0F29-4A3E-ABC2-0DDD5B7DF74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{338B78E2-0F29-4A3E-ABC2-0DDD5B7DF74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE85299-0FD3-4D9F-9BB8-C6DC343A7565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE85299-0FD3-4D9F-9BB8-C6DC343A7565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE85299-0FD3-4D9F-9BB8-C6DC343A7565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE85299-0FD3-4D9F-9BB8-C6DC343A7565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,7 +27,7 @@ namespace LaDanseServices.Services
 
             try
             {
-                var discordSiteResponse = await _laDanseRestClient.MakeRequest<EventPage>("queryEvents", null, null);
+                var discordSiteResponse = await _laDanseRestClient.GetAsync<EventPage>(_laDanseUrlBuilder.QueryEventsUrl(), null);
                 
                 var eventsPage = discordSiteResponse.Body;
 

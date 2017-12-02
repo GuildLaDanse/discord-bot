@@ -33,7 +33,6 @@ namespace WebApplication
             services.AddMvc();
 
             services.AddDbContext<DiscordBotContext>(
-                //options => options.UseSqlite("Data Source=discordbot.db")
                 options => options.UseMySql(Configuration.GetSection("database")["connection"])
             );
 

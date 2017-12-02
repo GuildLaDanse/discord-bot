@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BotCommon;
 using LaDanseRestTransport.Dto;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,68 +25,53 @@ namespace LaDanseRestTransport
             _logger = logger;
         }
 
-        public async Task<LaDanseRestResponse<TReturn>> GetAsync<TReturn>(string url)
-        {
-            return await MakeRequest<TReturn>();
-        }
-        
-        public async Task<LaDanseRestResponse<TReturn>> MakeRequest<TReturn>(
-            string actionName,
-            Dictionary<string, string> parameters,
-            int? impersonateUser)
-        {
-            return await MakeRequest<TReturn>();
-        }
-
-        public async Task<LaDanseRestResponse<TReturn>> MakeRequest<TReturn, TBody>(
-            string actionName, 
-            TBody body, 
-            Dictionary<string, string> parameters, 
-            int? impersonateUser)
-        {
-            return await MakeRequest<TReturn>();
-        }
-
-        private async Task<LaDanseRestResponse<TReturn>> MakeRequest<TReturn>()
+        public async Task<LaDanseRestResponse<TReturn>> GetAsync<TReturn>(string url, string accessToken = null)
         {
             using (var httpClient = new HttpClient())
             {
-                PrepareHttpClient(httpClient);
+                PrepareHttpClient(httpClient, accessToken);
+
+                var responseMsg = await httpClient.GetAsync(url);
                 
-                _logger.LogDebug("Making PostAsJsonAsync call");
+                var content = await responseMsg.Content.ReadAsStringAsync();
 
-                var responseMsg = await httpClient.GetStringAsync(CreateEndpointUri());
-
-                _logger.LogDebug(responseMsg);
-
-                if (true)
+                if (responseMsg.IsSuccessStatusCode)
                 {
+                    Console.WriteLine(content);
+                    
                     return new LaDanseRestResponse<TReturn>(
-                        JsonConvert.DeserializeObject<TReturn>(responseMsg));    
+                        JsonConvert.DeserializeObject<TReturn>(content)); 
                 }
                 else
                 {
-                    return await CreateException<TReturn>(new Exception("ThrowAsync Test 2"));
+                    Console.WriteLine(content);
+                    
+                    return new LaDanseRestResponse<TReturn>(
+                        JsonConvert.DeserializeObject<ErrorResponse>(content));
                 }
             }
         }
-        
-        private Uri CreateEndpointUri()
+
+        public async Task<LaDanseRestResponse<TReturn>> MakeRequest<TReturn, TBody>(
+            string url, 
+            TBody body,
+            string accessToken = null)
         {
-            return new Uri(_config["ladanse:api:baseUrl"] + "/api/events/");
+            throw new Exception("Not implemented");
         }
         
-        private void PrepareHttpClient(HttpClient httpClient)
+        private void PrepareHttpClient(HttpClient httpClient, string accessToken)
         {
             httpClient.DefaultRequestHeaders.Add(
                 "X-LADANSE-DISCORD-AUTH-DIGEST",
                 CreateAuthenticationDigest());
-            
-            /*
-            httpClient.DefaultRequestHeaders.Add(
-                "X-LADANSE-DISCORD-IMPERSONATION",
-                "<insert access token here>");
-            */
+
+            if (accessToken != null)
+            {
+                httpClient.DefaultRequestHeaders.Add(
+                    "X-LADANSE-DISCORD-IMPERSONATION",
+                    accessToken);
+            }
         }
 
         private static Task<LaDanseRestResponse<TReturn>> CreateException<TReturn>(Exception e)
@@ -102,8 +88,8 @@ namespace LaDanseRestTransport
             var ladanseApiSecret = _config["ladanse:api:secret"];
 
             var currentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-            
-            var random = Random("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 16);
+
+            var random = RandomStringUtils.Random(16);
 
             var toHash = random + ":" + currentTimestamp + ":" + ladanseApiSecret;
             
@@ -116,17 +102,6 @@ namespace LaDanseRestTransport
             var hashString = hash.Aggregate(string.Empty, (current, x) => current + string.Format("{0:x2}", x));
             
             return random + ":" + currentTimestamp + ":" + hashString;
-        }
-        
-        private static string Random(string chars, int length = 8)
-        {
-            var randomString = new StringBuilder();
-            var random = new Random();
-
-            for (int i = 0; i < length; i++)
-                randomString.Append(chars[random.Next(chars.Length)]);
-
-            return randomString.ToString();
         }
     }
 }

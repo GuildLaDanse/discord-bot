@@ -28,7 +28,7 @@ namespace LaDanseRestTransport
 
         public string QueryEventsUrl()
         {
-            return "/api/events/";
+            return ConstructFqUrl("/api/events/");
         }
 
         public string QueryEventByIdUrl()
@@ -139,6 +139,11 @@ namespace LaDanseRestTransport
         public string GetCharactersInGuildUrl()
         {
             return "/api/queries/charactersInGuild";
+        }
+
+        public string DiscordGrantUrl(string authCode)
+        {
+            return ConstructFqUrl("/api/discord/grant?authCode=" + authCode);
         }
 
         public string GetDiscordAuthInform(string nonce, string redirectUrl)
