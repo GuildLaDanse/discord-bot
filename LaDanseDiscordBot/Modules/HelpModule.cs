@@ -10,9 +10,9 @@ namespace LaDanseDiscordBot.Modules
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
         private readonly CommandService _service;
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
 
-        public HelpModule(CommandService service, IConfigurationRoot config)
+        public HelpModule(CommandService service, IConfiguration config)
         {
             _service = service;
             _config = config;

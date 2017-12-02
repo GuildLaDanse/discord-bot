@@ -10,13 +10,13 @@ namespace LaDanseDiscordBot.Services
     {
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
         private readonly IServiceProvider _provider;
 
         public CommandHandler(
             DiscordSocketClient discord,
             CommandService commands,
-            IConfigurationRoot config,
+            IConfiguration config,
             IServiceProvider provider)
         {
             _discord = discord;

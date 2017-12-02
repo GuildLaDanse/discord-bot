@@ -15,10 +15,10 @@ namespace LaDanseRestTransport
 {
     public class LaDanseRestClient
     {
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
         private readonly ILogger _logger;
 
-        public LaDanseRestClient(IConfigurationRoot config, ILogger<LaDanseRestClient> logger)
+        public LaDanseRestClient(IConfiguration config, ILogger<LaDanseRestClient> logger)
         {
             _config = config;
             _logger = logger;

@@ -14,10 +14,10 @@ namespace LaDanseDiscordBot.Modules
     [Name("Raids")]
     public class RaidsModule : ModuleBase<SocketCommandContext>
     {
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
         private readonly EventService _eventService;
 
-        public RaidsModule(IConfigurationRoot config, EventService eventService)
+        public RaidsModule(IConfiguration config, EventService eventService)
         {
             _config = config;
             _eventService = eventService;

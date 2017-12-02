@@ -16,6 +16,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaDanseRestTransport", "LaDanseRestTransport\LaDanseRestTransport.csproj", "{E236E35F-2EBB-4521-8E5B-D2E46DA8E94E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{338B78E2-0F29-4A3E-ABC2-0DDD5B7DF74E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD99BE2F-E8E0-42AC-AB3A-EB4263313F97} = {CD99BE2F-E8E0-42AC-AB3A-EB4263313F97}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

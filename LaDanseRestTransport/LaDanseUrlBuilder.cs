@@ -4,9 +4,9 @@ namespace LaDanseRestTransport
 {
     public class LaDanseUrlBuilder
     {
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
 
-        public LaDanseUrlBuilder(IConfigurationRoot config)
+        public LaDanseUrlBuilder(IConfiguration config)
         {
             _config = config;
         }
@@ -139,6 +139,11 @@ namespace LaDanseRestTransport
         public string GetCharactersInGuildUrl()
         {
             return "/api/queries/charactersInGuild";
+        }
+
+        public string GetDiscordAuthInform(string nonce, string redirectUrl)
+        {
+            return ConstructFqUrl("/authorization/discord/inform?nonce=" + nonce + "&redirect=" + redirectUrl);
         }
     }
 }

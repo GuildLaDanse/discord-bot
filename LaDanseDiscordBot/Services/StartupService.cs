@@ -12,13 +12,13 @@ namespace LaDanseDiscordBot.Services
     {
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
 
-        // DiscordSocketClient, CommandService, and IConfigurationRoot are injected automatically from the IServiceProvider
+        // DiscordSocketClient, CommandService, and IConfiguration are injected automatically from the IServiceProvider
         public StartupService(
             DiscordSocketClient discord,
             CommandService commands,
-            IConfigurationRoot config)
+            IConfiguration config)
         {
             _config = config;
             _discord = discord;
@@ -34,7 +34,9 @@ namespace LaDanseDiscordBot.Services
             await _discord.LoginAsync(TokenType.Bot, discordToken);     // Login to discord
             await _discord.StartAsync();                                // Connect to the websocket
 
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly());     // Load commands and modules into the command service
+            await _commands.AddModulesAsync(Assembly.GetAssembly(typeof(StartupService)));
+
+            //await _commands.AddModulesAsync(Assembly.GetEntryAssembly());     // Load commands and modules into the command service
         }
     }
 }
