@@ -151,7 +151,12 @@ namespace LaDanseRestTransport
             return ConstructFqUrl("/api/discord/grant?authCode=" + authCode);
         }
 
-        public string GetDiscordAuthInform(string nonce, string redirectUrl)
+        public string GetDiscordHelpUrl()
+        {
+            return ConstructFqUrl("/chatvoice/bothelp");
+        }
+        
+        public string GetDiscordAuthInformUrl(string nonce, string redirectUrl)
         {
             return ConstructFqUrl("/authorization/discord/inform?nonce=" + nonce + "&redirect=" + redirectUrl);
         }

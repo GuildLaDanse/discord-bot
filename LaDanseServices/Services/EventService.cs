@@ -21,28 +21,15 @@ namespace LaDanseServices.Services
             _logger = logger;
         }
 
-        public async Task<List<string>> GetRaids()
+        public async Task<EventPage> GetEvents()
         {
-            var result = new List<string>();
-
             try
             {
                 var discordSiteResponse = await _laDanseRestClient.GetAsync<EventPage>(_laDanseUrlBuilder.QueryEventsUrl(), null);
                 
                 var eventsPage = discordSiteResponse.Body;
 
-                foreach (var eventObj in eventsPage.Events)
-                {
-                    var eventName = eventObj.Name;
-
-                    var eventInviteTime = ToRealmTimeZone(eventObj.InviteTime);
-
-                    var eventUrl = _laDanseUrlBuilder.CreateGetEventDetail(eventObj.Id);
-
-                    _logger.LogInformation("Found event, added to response");
-
-                    result.Add($"**{eventName}** on {eventInviteTime:ddd d/M - HH:mm}\n{eventUrl}\n\n");
-                }
+                return eventsPage;
             }
             catch (Exception e)
             {
@@ -50,12 +37,7 @@ namespace LaDanseServices.Services
                 _logger.LogError(e.ToString());
             }
             
-            return result;
-        }
-
-        private DateTime ToRealmTimeZone(DateTime origDateTime)
-        {
-            return TimeZoneInfo.ConvertTime(origDateTime, TZConvert.GetTimeZoneInfo("CET"));
+            return null;
         }
     }
 }

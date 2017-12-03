@@ -1,7 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Reference Include="TimeZoneConverter, Version=2.2.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\.nuget\packages\timezoneconverter\2.2.1\lib\netstandard2.0\TimeZoneConverter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

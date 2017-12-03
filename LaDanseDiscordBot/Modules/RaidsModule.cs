@@ -1,13 +1,11 @@
-using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Discord;
+using BotCommon;
 using Discord.Commands;
-using Discord.WebSocket;
+using LaDanseRestTransport;
 using LaDanseServices.Services;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace LaDanseDiscordBot.Modules
 {
@@ -16,58 +14,77 @@ namespace LaDanseDiscordBot.Modules
     {
         private readonly IConfiguration _config;
         private readonly EventService _eventService;
+        private readonly LaDanseUrlBuilder _laDanseUrlBuilder;
+        private readonly ILogger _logger;
 
-        public RaidsModule(IConfiguration config, EventService eventService)
+        public RaidsModule(
+            IConfiguration config, 
+            EventService eventService, 
+            LaDanseUrlBuilder laDanseUrlBuilder,
+            ILogger<RaidsModule> logger)
         {
             _config = config;
             _eventService = eventService;
+            _laDanseUrlBuilder = laDanseUrlBuilder;
+            _logger = logger;
         }
 
         [Command("raids"), Alias("events")]
-        [Summary("List all future raids and events for the next month")]
+        [Summary("List all future raids for the next month")]
         public async Task Raids()
         {
             string resultStr = null;
 
-            using (var httpClient = new HttpClient())
+            var eventsPage = await _eventService.GetEvents();
+
+            if (!eventsPage.Events.Any())
             {
-                var events = await _eventService.GetRaids();
+                resultStr += "No upcoming raids scheduled on " + _config["ladanse:api:baseUrl"] + "\n\n";
 
-                if (!events.Any())
+                await ReplyAsync(resultStr);
+
+                return;
+            }
+            
+            resultStr += "Upcoming raids from " + _config["ladanse:api:baseUrl"] + "\n\n";
+            
+            foreach (var eventObj in eventsPage.Events)
+            {
+                var eventName = eventObj.Name;
+
+                var eventInviteTime = TimeUtils.ToRealmTimeZone(eventObj.InviteTime);
+
+                var eventUrl = _laDanseUrlBuilder.CreateGetEventDetail(eventObj.Id);
+
+                var willComeCount = 0;
+                var mightComeCount = 0;
+                var absenceCount = 0;
+
+                foreach (var signUp in eventObj.SignUps)
                 {
-                    resultStr += "No upcoming raids scheduled on " + _config["ladanse:api:baseUrl"] + "\n\n";
-
-                    await ReplyAsync(resultStr);
-
-                    return;
+                    switch (signUp.Type)
+                    {
+                        case "WillCome":
+                            willComeCount++;
+                            break;
+                        case "MightCome":
+                            mightComeCount++;
+                            break;
+                        case "Absent":
+                            absenceCount++;
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
-                resultStr += "Upcoming raids from " + _config["ladanse:api:baseUrl"] + "\n\n";
-
-                resultStr = events.Aggregate(resultStr, (current, eventStr) => current + eventStr);
+                resultStr += $"**{eventName}** on " +
+                             $"{eventInviteTime:ddd d/M HH:mm} - " +
+                             $"({willComeCount}/{mightComeCount} - {absenceCount})" +
+                             $"\n{eventUrl}\n\n";
             }
 
             await ReplyAsync(resultStr);
         }
-
-        [Command("sign")]
-        [Summary("Sign up for a raid")]
-        public async Task Sign()
-        {
-            string resultStr = null;
-
-            resultStr += $"I would love to sign you up, {Context.User.Username}, but you need to give me more information ...\n\n";
-            resultStr += "Try something like !sign me up for 17/02 as healer and dps";
-
-            await ReplyAsync(resultStr);
-        }
-
-        [Command("sign")]
-        [Summary("Sign up for a raid")]
-        public async Task Sign([Remainder]string text)
-        {
-            await ReplyAsync($"Sorry {Context.User.Username}, this functionality is not yet implemented. Stay tuned!");
-        }
     }
-            
 }
