@@ -14,7 +14,6 @@ namespace LaDanseDiscordBot.Services
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
 
-        // DiscordSocketClient, CommandService, and IConfiguration are injected automatically from the IServiceProvider
         public StartupService(
             DiscordSocketClient discord,
             CommandService commands,
@@ -27,16 +26,16 @@ namespace LaDanseDiscordBot.Services
 
         public async Task StartAsync()
         {
-            string discordToken = _config["discord:token"];     // Get the discord token from the config file
+            var discordToken = _config["discord:token"];
+            
             if (string.IsNullOrWhiteSpace(discordToken))
-                throw new Exception("Please enter your bot's token into the `_configuration.json` file found in the applications root directory.");
+                throw new Exception("Please enter your bot's token into the configuration file found in the start project root directory.");
 
             await _discord.LoginAsync(TokenType.Bot, discordToken);     // Login to discord
             await _discord.StartAsync();                                // Connect to the websocket
 
-            await _commands.AddModulesAsync(Assembly.GetAssembly(typeof(StartupService)));
-
-            //await _commands.AddModulesAsync(Assembly.GetEntryAssembly());     // Load commands and modules into the command service
+            // search for and add modules found in the assembly that hosts the type "StartupService" (current class)
+            await _commands.AddModulesAsync(Assembly.GetAssembly(typeof(StartupService))); 
         }
     }
 }

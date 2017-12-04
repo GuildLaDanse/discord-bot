@@ -39,26 +39,26 @@ namespace LaDanseDiscordBot.Services
             // Check if the message has a valid command prefix
             // A valid command prefix is either the prefixer characters or a direct reference of the bot user
             int argPos = 0;     
-            if (msg.HasStringPrefix(_config["prefix"], ref argPos) || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
+            if (msg.HasStringPrefix(_config["discord:prefix"], ref argPos) || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
             {
                 // Execute the command
                 var result = await _commands.ExecuteAsync(context, argPos, _provider);     
 
                 if (!result.IsSuccess)
                 {
-                    System.Console.WriteLine(result.ToString());
+                    Console.WriteLine(result.ToString());
 
-                    if (CommandError.UnknownCommand == result.Error)
+                    switch (result.Error)
                     {
-                        await context.Channel.SendMessageAsync($"Sorry, I don't know that command, try {_config["prefix"]}help for a list of commands you can use.");
-                    }
-                    else if (CommandError.BadArgCount == result.Error)
-                    {
-                        await context.Channel.SendMessageAsync($"Try {_config["prefix"]}help for a list of commands and the parameters you can pass.");
-                    }
-                    else
-                    {
-                        await context.Channel.SendMessageAsync("Oh my, something went wrong on my side :( Shouts for help have gone out!");
+                        case CommandError.UnknownCommand:
+                            await context.Channel.SendMessageAsync($"Sorry, I don't know that command, try {_config["prefix"]}help for a list of commands you can use.");
+                            break;
+                        case CommandError.BadArgCount:
+                            await context.Channel.SendMessageAsync($"Try {_config["prefix"]}help for a list of commands and the parameters you can pass.");
+                            break;
+                        default:
+                            await context.Channel.SendMessageAsync("Oh my, something went wrong on my side :( Shouts for help have gone out!");
+                            break;
                     }
                 }
             }
