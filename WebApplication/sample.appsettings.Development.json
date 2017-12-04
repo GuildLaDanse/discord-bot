@@ -1,0 +1,26 @@
+﻿{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+  "database": {
+    "connection": "server=localhost;userid=user;pwd=secret;port=3306;database=DiscordBotDev;sslmode=none;"
+  },
+  "discord": {
+    "prefix": "!",
+    "token": "This.Is.The.Token.From.The.Discord.Application.Site"
+  },
+  "aspnet": {
+    "baseUrl": "http://url.from.this.aspnet.app:port"
+  },
+  "ladanse": {
+    "api": {
+      "secret": "This.Is.The.Secret.Token.From.LaDanse.Website",
+      "baseUrl": "http://base.url.of.ladanse.website"
+    }
+  }
+}
