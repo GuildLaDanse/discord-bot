@@ -3,8 +3,6 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="TimeZoneConverter, Version=2.2.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\.nuget\packages\timezoneconverter\2.2.1\lib\netstandard2.0\TimeZoneConverter.dll</HintPath>
-    </Reference>
+    <PackageReference Include="TimeZoneConverter" Version="2.2.1" />
   </ItemGroup>
 </Project>
