@@ -60,17 +60,21 @@ namespace WebApplication
                 .AddSingleton(Configuration);
 
             services
+                .AddTransient<LaDanseCommandContextFactory>()
                 .AddSingleton<LaDanseUrlBuilder>()
                 .AddSingleton<LaDanseRestClient>()
                 .AddSingleton<EventService>();
 
+            /*
             foreach (var service in services)
             {
                 if (service.ServiceType.FullName.Contains("Context"))
                 {
-                    Console.WriteLine($"Service: {service.ServiceType.FullName}\n      Lifetime: {service.Lifetime}\n      Instance: {service.ImplementationType?.FullName}");
+                    Console.WriteLine(
+                        $"Service: {service.ServiceType.FullName}\n      Lifetime: {service.Lifetime}\n      Instance: {service.ImplementationType?.FullName}");
                 }
             }
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
